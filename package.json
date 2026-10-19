@@ -1,6 +1,13 @@
 {
-  "name": "prebuild-install",
+  "name": "@fitzyracing1/prebuild-install",
   "version": "7.1.3",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fitzyracing1/prebuild-install.git"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
   "description": "A command line tool to easily install prebuilt binaries for multiple version of node/iojs on a specific platform",
   "scripts": {
     "test": "standard && hallmark && tape test/*-test.js",
@@ -41,10 +48,8 @@
     "tape": "^5.3.1",
     "tempy": "0.2.1"
   },
-  "bin": "./bin.js",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/prebuild/prebuild-install.git"
+  "bin": {
+    "prebuild-install": "bin.js"
   },
   "author": "Mathias Buus (@mafintosh)",
   "contributors": [
@@ -73,6 +78,9 @@
     "baseRef": "tag v7.1.3",
     "upstreamVersion": "7.1.3",
     "fix": "Require tar-fs ^2.1.4 instead of ^2.0.0 so vulnerable tar-fs (CVE-2025-59343 / GHSA-vj76-c3g6-qr5v, symlink validation bypass) can no longer satisfy prebuild-install's dependency.",
-    "details": "See PATCH-CLOUD.md in this package."
+    "details": "See PATCH-CLOUD.md in this package.",
+    "scopedName": "@fitzyracing1/prebuild-install",
+    "unscopedName": "prebuild-install",
+    "githubPackages": "https://github.com/fitzyracing1/prebuild-install/pkgs/npm/prebuild-install"
   }
 }

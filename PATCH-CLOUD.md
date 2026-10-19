@@ -26,3 +26,22 @@ Require tar-fs ^2.1.4 instead of ^2.0.0 so vulnerable tar-fs (CVE-2025-59343 / G
 ## Opting out
 
 Remove the patch-cloud `registry=` override and reinstall from registry.npmjs.org to get the upstream tarball.
+
+## GitHub Packages (scoped name)
+
+The same patched build can be published to GitHub Packages as `@fitzyracing1/prebuild-install@7.1.3`
+(GitHub Packages only accepts names scoped to the repo owner). The unscoped name `prebuild-install`
+is what the patch-cloud registry serves; the scoped name is what GitHub Packages serves.
+
+```ini
+# .npmrc (project or ~/.npmrc). GitHub Packages npm needs a token even for public packages:
+@fitzyracing1:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}   # a token with read:packages
+```
+
+```bash
+# keep require('prebuild-install') / import 'prebuild-install' working via an npm alias:
+npm install prebuild-install@npm:@fitzyracing1/prebuild-install@7.1.3
+# or install under the scoped name:
+npm install @fitzyracing1/prebuild-install@7.1.3
+```
