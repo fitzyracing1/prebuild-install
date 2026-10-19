@@ -4,6 +4,14 @@ const home = require('os').homedir
 const util = require('../util')
 const path = require('path')
 
+// patch-cloud: this file's own package.json is now @fitzyracing1/prebuild-install with the fork as
+// repository (GitHub Packages). These URL tests use it as a sample consumer package, so pin the
+// upstream name/repository they were written against. Test-only; nothing here ships.
+const upstreamPkg = () => Object.assign({}, require('../package.json'), {
+  name: 'prebuild-install',
+  repository: { type: 'git', url: 'https://github.com/prebuild/prebuild-install.git' }
+})
+
 test('prebuildCache() for different environments', function (t) {
   const NPMCACHE = process.env.npm_config_cache
   delete process.env.npm_config_cache
@@ -76,7 +84,7 @@ test('urlTemplate() returns different templates based on pkg and rc', function (
   const t6 = util.urlTemplate(o6)
   t.equal(t6, 'http://foo.com/w00t/{name}-{major}.{minor}-{runtime}-v{abi}-{platform}-{arch}.tar.gz', 'pkg.binary.package_name is added after host and remote_path, custom format')
   const o7 = {
-    pkg: require('../package.json'),
+    pkg: upstreamPkg(),
     download: true
   }
   delete o7.binary
@@ -86,7 +94,7 @@ test('urlTemplate() returns different templates based on pkg and rc', function (
   delete process.env[envProperty]
   t.equal(t7, 'http://overriden-url.com/overriden-path/{tag_prefix}{version}/{name}-v{version}-{runtime}-v{abi}-{platform}{libc}-{arch}.tar.gz', '--download with host mirror override')
   const o8 = {
-    pkg: Object.assign({}, require('../package.json'), {
+    pkg: Object.assign({}, upstreamPkg(), {
       binary: {
         host: 'http://foo.com',
         remote_path: 'w00t',
@@ -100,7 +108,7 @@ test('urlTemplate() returns different templates based on pkg and rc', function (
   const t8 = util.urlTemplate(o8)
   delete process.env[envProperty]
   t.equal(t8, 'http://overriden-url.com/overriden-path/{tag_prefix}{version}/{name}-v{version}-{runtime}-v{abi}-{platform}{libc}-{arch}.tar.gz', '--download with binary defined and host mirror override')
-  const o9 = { pkg: require('../package.json'), download: true }
+  const o9 = { pkg: upstreamPkg(), download: true }
   const t9 = util.urlTemplate(o9)
   t.equal(t9, 'https://github.com/prebuild/prebuild-install/releases/download/{tag_prefix}{version}/{name}-v{version}-{runtime}-v{abi}-{platform}{libc}-{arch}.tar.gz', '--download with no arguments, no pkg.binary, no host mirror, default format')
   t.end()
